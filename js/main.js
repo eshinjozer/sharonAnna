@@ -21,20 +21,23 @@
 		
 		var owl = $('.owl-carousel-fullwidth');
 		owl.owlCarousel({
-			animateOut: 'fadeOut',
+		    animateOut: 'slideOutDown',
+		    animateIn: 'flipInX',
 			items: 1,
 			loop: true,
 			margin: 0,
 			nav: true,
 			dots: false,
 			smartSpeed: 800,
-			autoHeight: false
+			autoHeight: false,
+			navText: ["<i class='icon-arrow-left'></i>","<i class='icon-arrow-right'></i>"]
+
 		});
 	};
 
 	var sliderMain = function() {
 		
-	  	$('#qbootstrap-slider-hero .flexslider').flexslider({
+	  	$('#jacinth-slider-hero .flexslider').flexslider({
 			animation: "fade",
 			slideshowSpeed: 5000,
 			directionNav: true,
@@ -76,7 +79,7 @@
 	// Burger Menu
 	var burgerMenu = function() {
 
-		$('body').on('click', '.js-qbootstrap-nav-toggle', function(event){
+		$('body').on('click', '.js-jacinth-nav-toggle', function(event){
 
 			if ( $('#navbar').is(':visible') ) {
 				$(this).removeClass('active');	
@@ -108,12 +111,12 @@
 				navbar = $('#navbar');
 		    $('html, body').animate({
 		        scrollTop: $('[data-section="' + section + '"]').offset().top
-		    }, 500);
+		    }, 1000);
 
 		    if ( navbar.is(':visible')) {
 		    	navbar.removeClass('in');
 		    	navbar.attr('aria-expanded', 'false');
-		    	$('.js-qbootstrap-nav-toggle').removeClass('active');
+		    	$('.js-jacinth-nav-toggle').removeClass('active');
 		    }
 
 		    event.preventDefault();
@@ -162,16 +165,16 @@
 
 		$(window).scroll(function(event){
 
-		   	var header = $('#qbootstrap-header'),
+		   	var header = $('#jacinth-header'),
 				scrlTop = $(this).scrollTop();
 
 			if ( scrlTop > 500 && scrlTop <= 2000 ) {
-				header.addClass('navbar-fixed-top qbootstrap-animated slideInDown');
+				header.addClass('navbar-fixed-top jacinth-animated slideInDown');
 			} else if ( scrlTop <= 500) {
 				if ( header.hasClass('navbar-fixed-top') ) {
-					header.addClass('navbar-fixed-top qbootstrap-animated slideOutUp');
+					header.addClass('navbar-fixed-top jacinth-animated slideOutUp');
 					setTimeout(function(){
-						header.removeClass('navbar-fixed-top qbootstrap-animated slideInDown slideOutUp');
+						header.removeClass('navbar-fixed-top jacinth-animated slideInDown slideOutUp');
 					}, 100 );
 				}
 			} 
@@ -282,7 +285,7 @@
 		// If the count down is finished, write some text 
 		if (distance < 0) {
 		 clearInterval(x);
-		 document.getElementById("demo").innerHTML = "The Wedding Ceremony is Over";
+		 document.getElementById("demo").innerHTML = "The Wedding Ceremony is Over..Happy Married Life Sharon & Sankri";
 		}
 		}, 1000);	
 	
@@ -309,3 +312,76 @@
 
 
 }());
+
+    $(window).scroll(function () {
+        if ($(this).scrollTop() > 180) {
+            $('#back-to-top').fadeIn();
+        } else {
+            $('#back-to-top').fadeOut();
+        }
+    });
+
+    // scroll body to 0px on click
+    $('#back-to-top').click(function () {
+        $('#back-to-top').tooltip('hide');
+        $('body,html').animate({
+            scrollTop: 0
+        }, 800);
+            return false;
+    });
+
+    $('#back-to-top').tooltip('show');
+
+    toastr.options = {
+      "closeButton": true,
+      "debug": false,
+      "newestOnTop": true,
+      "progressBar": true,
+      "positionClass": "toast-top-right",
+      "preventDuplicates": true,
+      "onclick": null,
+      "showDuration": "300",
+      "hideDuration": "1000",
+      "timeOut": "5000",
+      "extendedTimeOut": "1000",
+      "showEasing": "swing",
+      "hideEasing": "linear",
+      "showMethod": "fadeIn",
+      "hideMethod": "fadeOut"
+    }
+
+
+$(document).ready(function () {
+    $('#contact-submit').click(function() { 
+        name = $('#name').val().trim();
+        message = $('#message').val().trim();
+        instance = $(this);
+        if(name != '' && message != '') {
+            instance.html('Processing');
+            //toastr.info('Processing..Please wait');
+            $.ajax({
+                url: "http://kingstoneducation.net/inv.php",
+                data: {'name' : name, 'message' : message},
+                dataType : 'json',
+                success: function(result){
+                    instance.html('Submit Wishes');
+                    if(result.status == true) {
+                        $('#couroselItems').data('owlCarousel').addItem('<div class="item"><div class="itemContent"><p class="wishesTitle">'+name+'</p><p class="wishesDesc">'+message+'</p></div></div>', 0);
+                        toastr.success(result.message);
+                    } else {
+                       toastr.error(result.message);
+                    }
+                },
+                error: function(jqXHR, exception) {
+                    instance.html('Submit Wishes');
+                    toastr.error('Something went wrong..Try again after refreshing the page..<span class="closeSpan">x</span>').css('background','red');
+                }
+            });
+            
+        } else {
+            toastr.error('Please enter your name and wishes..');
+        }
+
+    });
+});
+
