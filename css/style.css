@@ -321,23 +321,7 @@ h1, h2, h3, h4, h5, h6 {
   height: 800px;
   width: 100%;
 }
-
-@media screen and (max-width: 765px) {
-  .jacinth-cover {
-    background-size: contain !important;
-  }
-  #jacinth-header {
-    position: relative;
-  }
-  .jacinth-cover .display-tc, .display-tc {
-    vertical-align: top !important;
-  }
-
-  .jacinth-cover, .jacinth-hero {
-    height: 100vh;
-  }
-}
-@media (min-width: 766px) and (max-width: 768px) {
+@media screen and (max-width: 768px) {
   .jacinth-cover,
   .jacinth-hero {
     height: 700px;
